@@ -55,7 +55,7 @@ def get_user(id):
     except e:
         return make_response(jsonify({'message': 'error getting user'}), 500)
 
-@app.route('users/<int:id>', methods=['PUT'])
+@app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
     try:
         user = User.query.filter_by(id=id).first()
