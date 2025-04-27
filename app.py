@@ -22,11 +22,9 @@ class User(db.Model):
 
 db.create_all()
 
-
 @app.route('/test', methods=['GET'])
 def test():
     return make_response(jsonify({'message': 'test route'}), 200)
-
 
 @app.route('/users', methods=['POST'])
 def create_user():
@@ -47,30 +45,29 @@ def get_users():
     except e:
         return make_response(jsonify({'message': 'error getting users'}), 500)
 
-    @app.route('/users/<int:id>', methods=['GET'])
-    def get_user(id):
-        try:
-            user = User.query.filter_by(id=id).first()
-            if user:
-               return make_response(jsonify({'user': user.json()}), 200)
-            return make_response(jsonify({'message': 'user not found'}), 404)
-        except e:
-            return make_response(jsonify({'message': 'error getting user'}), 500)
+@app.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    try:
+        user = User.query.filter_by(id=id).first()
+        if user:
+           return make_response(jsonify({'user': user.json()}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
+    except e:
+        return make_response(jsonify({'message': 'error getting user'}), 500)
 
-    @app.route('users/<int:id>', methods=['PUT'])
-    def update_user(id):
-        try:
-            user = User.query.filter_by(id=id).first()
-            if user:
-                data = request.get_json()
-                user.username = data['username']
-                user.email = data['email']
-                db.session.commit()
-                return make_response(jsonify({'message': 'user updated'}), 200)
-            return make_response(jsonify({'message': 'user not found'}), 404)
-
-        except e:
-            return make_response(jsonify({'message': 'error updating user'}), 500)
+@app.route('users/<int:id>', methods=['PUT'])
+def update_user(id):
+    try:
+        user = User.query.filter_by(id=id).first()
+        if user:
+            data = request.get_json()
+            user.username = data['username']
+            user.email = data['email']
+            db.session.commit()
+            return make_response(jsonify({'message': 'user updated'}), 200)
+        return make_response(jsonify({'message': 'user not found'}), 404)
+    except e:
+        return make_response(jsonify({'message': 'error updating user'}), 500)
 
 @app.route('/users/<int:id>', methods=['DELETE'])
 def delete_user(id):
