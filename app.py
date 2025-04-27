@@ -15,10 +15,7 @@ class User(db.Model):
     email  = db.Column(db.String(120), unique=True, nullable=False)
 
     def json(self):
-        return {'id': id, 'username': self.username, 'email': self.email}
-    # def __init__(self, username, email):
-    #     self.username = username
-    #     self.email = email
+        return {'id': self.id, 'username': self.username, 'email': self.email}
 
 db.create_all()
 
@@ -50,10 +47,11 @@ def get_user(id):
     try:
         user = User.query.filter_by(id=id).first()
         if user:
-           return make_response(jsonify({'user': user.json()}), 200)
+            return make_response(jsonify({'user': user.json()}), 200)
         return make_response(jsonify({'message': 'user not found'}), 404)
-    except e:
-        return make_response(jsonify({'message': 'error getting user'}), 500)
+    except Exception as e:
+        return make_response(jsonify({'message': 'error getting user', 'error': str(e)}), 500)
+
 
 @app.route('/users/<int:id>', methods=['PUT'])
 def update_user(id):
