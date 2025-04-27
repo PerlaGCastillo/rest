@@ -28,7 +28,7 @@ def test():
 
 @app.route('/users', methods=['POST'])
 def create_user():
-   try:
+    try:
         data = request.get_json()
         new_user = User(username=data['username'], email=data['email'])
         db.session.add(new_user)
